@@ -1,0 +1,21 @@
+services:
+  app:
+    build: .
+    container_name: go_relatorio_container
+    volumes:
+        - ./APIs:/root/APIs
+  
+  mock-api-1:
+    image: clue/json-server
+    command: --host 0.0.0.0
+    ports:
+        - 3001:80
+    volumes:
+        - ./mockAPIs/API_1.json:/data/db.json
+
+  mock-api-2:
+    image: clue/json-server
+    ports:
+        - 3002:80
+    volumes:
+        - ./mockAPIs/API_2.json:/data/db.json

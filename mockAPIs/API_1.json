@@ -1,0 +1,37 @@
+{
+  "empregados": [
+    {
+      "id": "1",
+      "nome": "João Silva",
+      "idade": 30,
+      "salario": 4500.00,
+      "setor_id": "tecnologia"
+    },
+    {
+      "id": "2",
+      "nome": "Maria Santos",
+      "idade": 28,
+      "salario": 5200.00,
+      "setor_id": "tecnologia"
+    },
+    {
+      "id": "3",
+      "nome": "Carlos Souza",
+      "idade": 35,
+      "salario": 6100.00,
+      "setor_id": "rh"
+    }
+  ],
+  "setores": [
+    {
+      "id": "tecnologia",
+      "nome_setor": "Desenvolvimento de Software",
+      "orcamento": 150000.00
+    },
+    {
+      "id": "rh",
+      "nome_setor": "Recursos Humanos",
+      "orcamento": 45000.00
+    }
+  ]
+}
