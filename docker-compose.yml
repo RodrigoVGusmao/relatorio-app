@@ -4,12 +4,22 @@ services:
     container_name: go_relatorio_container
     volumes:
         - ./APIs:/root/APIs
+    depends_on:
+        mock-api-1:
+            condition: service_healthy
+        mock-api-2:
+            condition: service_healthy
   
   mock-api-1:
     image: clue/json-server
     command: --host 0.0.0.0
     ports:
         - 3001:80
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:80/empregados"]
+      interval: 2s
+      timeout: 2s
+      retries: 5
     volumes:
         - ./mockAPIs/API_1.json:/data/db.json
 
@@ -17,5 +27,10 @@ services:
     image: clue/json-server
     ports:
         - 3002:80
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:80/maquinas"]
+      interval: 2s
+      timeout: 2s
+      retries: 5
     volumes:
         - ./mockAPIs/API_2.json:/data/db.json
