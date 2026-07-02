@@ -1,0 +1,87 @@
+{
+  "Init": function(rede_id) {
+    globalThis.usuarios = [];
+    globalThis.redes = [];
+    globalThis.endpoints = [];
+  },
+  "API_1":{
+    "usuarios":[
+      '{{repeat(25, 30)}}',
+      {
+        "id": function(tags)
+        {
+          globalThis.usuario = [tags.guid()];
+          globalThis.usuarios.push(globalThis.usuario);
+          return usuario[0];
+        },
+        "username":'{{firstName()}}_{{surname()}}',
+        "email":'{{email()}}',
+        "phone":'{{phone("(xx) 9xxxx-xxxx")}}',
+        "setor":'{{random("Diretoria", "Jurídico", "Financeiro", "Controladoria", "Recursos Humanos", "Comunicação", "Suporte Técnico", "Tecnologia da Informação", "Segurança da Informação", "Desenvolvimento", "Operações", null)}}'
+      }
+    ]
+  },
+  "API_3":{
+    "subredes": [
+      '{{repeat(5, 10)}}',
+      {
+        "id": function(tags)
+        {
+          globalThis.rede = [tags.guid(), tags.integer(1, 255), tags.integer(1,255)];
+          globalThis.redes.push(globalThis.rede);
+          return rede[0];
+        },
+        "nome_segmento": '{{lorem(2, "words")}}',
+        "cidr": function(tags) {
+          return "10."+rede[1]+"."+rede[2]+".0/24";
+        }
+      }
+    ]
+  },
+  "API_2":{
+    "endpoints":[
+      '{{repeat(20, 25)}}',
+      {
+        "id": function(tags)
+        {
+          globalThis.endpoint = [tags.guid()];
+          globalThis.endpoints.push(globalThis.endpoint);
+          return endpoint[0];
+        },
+        "hostname":'{{lorem(2, "words")}}',
+        "ip": function(tags) {
+          var i = tags.integer(0, globalThis.redes.length-1);
+          globalThis.rede = globalThis.redes[i];
+          return "10."+rede[1]+"."+rede[2]+"."+tags.integer(1,254);
+        },
+        "criticidade":'{{random("Crítica", "Alta", "Média", "Baixa")}}',
+        "rede_id":  function(tags) {
+          return globalThis.rede[0];
+        }
+      }
+    ]
+  },
+  "API_4":{
+    "logs_acesso": [
+      '{{repeat(50, 55)}}',
+      {
+        "id": '{{guid()}}',
+        "usuario_id": function(tags) {
+          var i = tags.integer(0, globalThis.usuarios.length-1);
+          globalThis.usuario = globalThis.usuarios[i];
+          return globalThis.usuario[0];
+        },
+        "endpoint_id": function(tags) {
+          var i = tags.integer(0, globalThis.endpoints.length-1);
+          globalThis.endpoint = globalThis.endpoints[i];
+          return globalThis.endpoint[0];
+        },
+        "sucesso": '{{bool()}}',
+        "payload_mb": '{{integer(5, 2500)}}',
+        "tentativas": '{{integer(1, 20)}}',
+        "porta_destino": '{{random(20, 21, 22, 23, 53, 80, 443, 445, 3306, 3389, null)}}',
+        "protocolo": '{{random("TCP", "UDP", null)}}'
+      }
+    ]
+  }
+}

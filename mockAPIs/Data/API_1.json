@@ -1,0 +1,186 @@
+{
+  "usuarios":[
+    {
+      "id":"35b7bfdc-a406-46d2-a66d-6ac2c1c6bd9f",
+      "username":"Gilbert_Guthrie",
+      "email":"gilbertguthrie@blurrybus.com",
+      "phone":"(87) 95525-3008",
+      "setor":"Financeiro"
+    },
+    {
+      "id":"952712bc-0bcf-4c21-ab04-01335d1f443b",
+      "username":"Rosetta_Combs",
+      "email":"rosettacombs@blurrybus.com",
+      "phone":"(86) 96446-2649",
+      "setor":"Tecnologia da Informação"
+    },
+    {
+      "id":"4125c366-836b-46cf-914d-1ac91ec8dd50",
+      "username":"Sybil_Alexander",
+      "email":"sybilalexander@blurrybus.com",
+      "phone":"(99) 94442-2710",
+      "setor":"Diretoria"
+    },
+    {
+      "id":"565454cc-510a-4950-815b-dabe9dd0c59c",
+      "username":"Jacquelyn_Lindsay",
+      "email":"jacquelynlindsay@blurrybus.com",
+      "phone":"(89) 91579-2579",
+      "setor":"Diretoria"
+    },
+    {
+      "id":"e45f7063-8026-4916-a9f0-135dbe436e7e",
+      "username":"Vincent_Abbott",
+      "email":"vincentabbott@blurrybus.com",
+      "phone":"(91) 90526-3081",
+      "setor":"Diretoria"
+    },
+    {
+      "id":"3106de3a-1557-4092-80c8-ad26362be77b",
+      "username":"Reed_Mayer",
+      "email":"reedmayer@blurrybus.com",
+      "phone":"(84) 99548-2542",
+      "setor":"Diretoria"
+    },
+    {
+      "id":"dd677f54-6c3a-4fc6-8fd5-c5d794041cd9",
+      "username":"Cynthia_Humphrey",
+      "email":"cynthiahumphrey@blurrybus.com",
+      "phone":"(85) 98580-3733",
+      "setor":"Suporte Técnico"
+    },
+    {
+      "id":"782ab60a-adff-4620-870a-dfd909324457",
+      "username":"Perez_Osborne",
+      "email":"perezosborne@blurrybus.com",
+      "phone":"(94) 92585-2910",
+      "setor":"Recursos Humanos"
+    },
+    {
+      "id":"824ed72a-12b9-4845-b394-1f0b966501d5",
+      "username":"Lavonne_Finch",
+      "email":"lavonnefinch@blurrybus.com",
+      "phone":"(80) 97479-2419",
+      "setor":"Jurídico"
+    },
+    {
+      "id":"938d1a34-1ff2-440c-b05c-a621929ffefc",
+      "username":"Monica_Cooley",
+      "email":"monicacooley@blurrybus.com",
+      "phone":"(88) 99583-2587",
+      "setor":"Jurídico"
+    },
+    {
+      "id":"9c9e8ba8-d840-4a27-89d2-de5b74edd6b8",
+      "username":"Rosanna_Walton",
+      "email":"rosannawalton@blurrybus.com",
+      "phone":"(82) 94594-2848",
+      "setor":"Financeiro"
+    },
+    {
+      "id":"6de65455-2ff5-40ac-988d-489caace37d9",
+      "username":"Victoria_Salazar",
+      "email":"victoriasalazar@blurrybus.com",
+      "phone":"(85) 91474-2131",
+      "setor":"Operações"
+    },
+    {
+      "id":"aea8e570-ceda-4057-b78e-8094c115da18",
+      "username":"Cotton_Keller",
+      "email":"cottonkeller@blurrybus.com",
+      "phone":"(95) 97467-2691",
+      "setor":"Operações"
+    },
+    {
+      "id":"cd1f5ed6-d950-4d76-87b0-9666abe0ef80",
+      "username":"Elaine_Day",
+      "email":"elaineday@blurrybus.com",
+      "phone":"(85) 98465-2004",
+      "setor":"Tecnologia da Informação"
+    },
+    {
+      "id":"09f42dc5-fd8b-4065-a0b5-236ba221b0bc",
+      "username":"Nicole_Craft",
+      "email":"nicolecraft@blurrybus.com",
+      "phone":"(95) 98477-3076",
+      "setor":"Comunicação"
+    },
+    {
+      "id":"bd8c380c-3db9-443e-807a-6c0cf49591d4",
+      "username":"Harding_Parrish",
+      "email":"hardingparrish@blurrybus.com",
+      "phone":"(83) 90529-3053",
+      "setor":"Comunicação"
+    },
+    {
+      "id":"c3982457-2296-49ef-845c-f61609b8d9d6",
+      "username":"Patty_Rollins",
+      "email":"pattyrollins@blurrybus.com",
+      "phone":"(86) 99449-3158",
+      "setor":"Diretoria"
+    },
+    {
+      "id":"b05bdc2e-ca88-439f-b1ad-c9b8ab6185bf",
+      "username":"Becky_Sanchez",
+      "email":"beckysanchez@blurrybus.com",
+      "phone":"(98) 98541-2609",
+      "setor":null
+    },
+    {
+      "id":"9878994c-4abc-4741-85c8-78e8b9a5ae1c",
+      "username":"Geneva_Keith",
+      "email":"genevakeith@blurrybus.com",
+      "phone":"(90) 97471-3208",
+      "setor":"Comunicação"
+    },
+    {
+      "id":"28dc85a3-3726-435b-b2ab-9920014bd80a",
+      "username":"Katrina_May",
+      "email":"katrinamay@blurrybus.com",
+      "phone":"(90) 93558-2188",
+      "setor":"Segurança da Informação"
+    },
+    {
+      "id":"0610a118-72b4-4075-ab1b-d8fd78b43a05",
+      "username":"Gonzales_Kirkland",
+      "email":"gonzaleskirkland@blurrybus.com",
+      "phone":"(87) 99532-2344",
+      "setor":"Operações"
+    },
+    {
+      "id":"9523e292-031c-4251-9b7e-47bc676ff468",
+      "username":"Cherie_Berger",
+      "email":"cherieberger@blurrybus.com",
+      "phone":"(93) 99503-3953",
+      "setor":null
+    },
+    {
+      "id":"a59c2b1b-3f6b-43a8-994d-38e6d2e0e163",
+      "username":"Collins_Riggs",
+      "email":"collinsriggs@blurrybus.com",
+      "phone":"(84) 96576-3908",
+      "setor":"Operações"
+    },
+    {
+      "id":"67873781-4b70-4ba3-8722-0ee9dafbb0d6",
+      "username":"Hicks_Pratt",
+      "email":"hickspratt@blurrybus.com",
+      "phone":"(86) 91517-3611",
+      "setor":null
+    },
+    {
+      "id":"680e53d5-ad28-4922-9a5d-e8e31120d3eb",
+      "username":"Aileen_Foster",
+      "email":"aileenfoster@blurrybus.com",
+      "phone":"(97) 94545-3877",
+      "setor":"Jurídico"
+    },
+    {
+      "id":"6efd8e8c-874f-4bc2-988b-adfa76d3f6ec",
+      "username":"Latisha_Charles",
+      "email":"latishacharles@blurrybus.com",
+      "phone":"(86) 99573-2603",
+      "setor":null
+    }
+  ]
+}

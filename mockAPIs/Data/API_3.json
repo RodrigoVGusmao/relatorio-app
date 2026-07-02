@@ -1,0 +1,49 @@
+{
+  "subredes": [
+    {
+      "id": "0981636f-253c-4b4a-9bd6-0c6688d3dfea",
+      "nome_segmento": "cupidatat esse",
+      "cidr": "10.178.132.0/24"
+    },
+    {
+      "id": "a008ed29-11ee-4003-b84f-e7a6cf9a7285",
+      "nome_segmento": "aliquip veniam",
+      "cidr": "10.213.186.0/24"
+    },
+    {
+      "id": "87a7935d-e6ac-47f7-a008-afd10a9ddd55",
+      "nome_segmento": "do velit",
+      "cidr": "10.186.62.0/24"
+    },
+    {
+      "id": "16b38cd3-caa0-4e0e-acbb-622b492a4460",
+      "nome_segmento": "laboris minim",
+      "cidr": "10.199.79.0/24"
+    },
+    {
+      "id": "c7ab48fb-0e55-4f52-97e7-5811e6da7844",
+      "nome_segmento": "cupidatat non",
+      "cidr": "10.198.88.0/24"
+    },
+    {
+      "id": "74f4b197-bcbd-481f-ba8b-94d896401903",
+      "nome_segmento": "officia nisi",
+      "cidr": "10.56.216.0/24"
+    },
+    {
+      "id": "c33e0f57-d354-4b92-b9f4-e53bc8e52b0e",
+      "nome_segmento": "sit reprehenderit",
+      "cidr": "10.5.75.0/24"
+    },
+    {
+      "id": "23bdbeda-abe0-4ac2-a7a4-00704680ba7e",
+      "nome_segmento": "laboris excepteur",
+      "cidr": "10.148.254.0/24"
+    },
+    {
+      "id": "cc617300-6919-49be-b2e3-3f3cea0da501",
+      "nome_segmento": "commodo aliqua",
+      "cidr": "10.3.56.0/24"
+    }
+  ]
+}

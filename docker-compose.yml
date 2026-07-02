@@ -9,28 +9,55 @@ services:
             condition: service_healthy
         mock-api-2:
             condition: service_healthy
+        mock-api-3:
+            condition: service_healthy
+        mock-api-4:
+            condition: service_healthy
   
   mock-api-1:
     image: clue/json-server
-    command: --host 0.0.0.0
     ports:
         - 3001:80
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:80/empregados"]
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:80/usuarios"]
       interval: 2s
       timeout: 2s
       retries: 5
     volumes:
-        - ./mockAPIs/API_1.json:/data/db.json
+        - ./mockAPIs/Data/API_1.json:/data/db.json
 
   mock-api-2:
     image: clue/json-server
     ports:
         - 3002:80
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:80/maquinas"]
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:80/endpoints"]
       interval: 2s
       timeout: 2s
       retries: 5
     volumes:
-        - ./mockAPIs/API_2.json:/data/db.json
+        - ./mockAPIs/Data/API_2.json:/data/db.json
+        
+  mock-api-3:
+    image: clue/json-server
+    ports:
+        - 3003:80
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:80/subredes"]
+      interval: 2s
+      timeout: 2s
+      retries: 5
+    volumes:
+        - ./mockAPIs/Data/API_3.json:/data/db.json
+
+  mock-api-4:
+    image: clue/json-server
+    ports:
+        - 3004:80
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:80/logs_acesso"]
+      interval: 2s
+      timeout: 2s
+      retries: 5
+    volumes:
+        - ./mockAPIs/Data/API_4.json:/data/db.json
