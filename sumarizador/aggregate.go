@@ -7,13 +7,13 @@ import (
 func zeroPreProc(accumulator JData, currentData JData, column string, target string) {
 	accumulator[column] = 0.0
 }
+func nilPreProc(accumulator JData, currentData JData, column string, target string) {
+	accumulator[column] = nil
+}
 
 //agrupamento
 func groupBy(data []JData, groupBy []string, target string) []JData {
 	return aggregate(data, groupBy, "", "", nil, nil, nil)
-}
-func groupByPosProc(accumulator JData, currentData JData, column string, target string) {
-	delete(accumulator, column)
 }
 
 //contagem
@@ -43,40 +43,37 @@ func countDistinct(data []JData, groupByVar []string, target string) []JData {
 
 //soma
 func sum(data []JData, groupBy []string, target string) []JData {
-	return aggregate(data, groupBy, target, "sum", zeroPreProc, sumProc, nil)
+	return aggregate(data, groupBy, target, "sum", nilPreProc, sumProc, nil)
 }
 func sumProc(accumulator JData, currentData JData, column string, target string) {
-	var targetVal float64
-	if val, ok := toFloat64(currentData[target]); ok {
-		targetVal = val
-	} else {
+	targetVal, ok1 := toFloat64(currentData[target])
+	currentSum, ok2 := toFloat64(accumulator[column])
+	if !ok2 && !ok1 {
 		return
 	}
-	currentSum, _ := toFloat64(accumulator[column])
 	accumulator[column] = currentSum + targetVal
 }
 
 //média
 func avg(data []JData, groupBy []string, target string) []JData {
-	return aggregate(data, groupBy, target, "avg", zeroPreProc, avgProc, avgPosProc)
+	return aggregate(data, groupBy, target, "avg", nil, avgProc, avgPosProc)
 }
 func avgProc(accumulator JData, currentData JData, column string, target string) {
 	if _, ok := toFloat64(currentData[target]); !ok {
 		return
 	}
-	sumProc(accumulator, currentData, "_sum\x1f", target)
-	countProc(accumulator, currentData, "_count\x1f", "")
+	sumProc(accumulator, currentData, column, target)
+	countProc(accumulator, currentData, "\x12count", "")
 }
 func avgPosProc(accumulator JData, currentData JData, column string, target string) {
-	if _, exists := accumulator["_count\x1f"]; !exists {
+	if _, exists := accumulator["\x12count"]; !exists {
 		accumulator[column] = nil
 		return
 	}
-	currentSum, _ := toFloat64(accumulator["_sum\x1f"])
-	currentCount, _ := toFloat64(accumulator["_count\x1f"])
+	currentSum, _ := toFloat64(accumulator[column])
+	currentCount, _ := toFloat64(accumulator["\x12count"])
 	accumulator[column] = currentSum/currentCount
-	delete(accumulator, "_sum\x1f")
-	delete(accumulator, "_count\x1f")
+	delete(accumulator, "\x12count")
 }
 
 //mínimo
@@ -85,25 +82,23 @@ func min(data []JData, groupBy []string, target string) []JData {
 }
 func minPreProc(accumulator JData, currentData JData, column string, target string) {
 	accumulator[column] = math.MaxFloat64
-	accumulator["_current\x1f"] = column
+	accumulator["\x12current"] = column
 }
 func minProc(accumulator JData, currentData JData, column string, target string) {
-	var targetVal float64
-	if val, ok := toFloat64(currentData[target]); ok {
-		targetVal = val
-		accumulator["_valid\x1f"] = true
-	} else {
+	targetVal, ok := toFloat64(currentData[target])
+	if !ok {
 		return
 	}
-	currentMin, _ := toFloat64(accumulator[column])
+	var currentMin float64
+	currentMin, accumulator["\x12valid"] = toFloat64(accumulator[column])
 	accumulator[column] = math.Min(currentMin, targetVal)
 }
 func minMaxPosProc(accumulator JData, currentData JData, column string, target string) {
-	if _, exists := accumulator["_valid\x1f"]; !exists {
-		accumulator[accumulator["_current\x1f"].(string)] = nil
+	if _, exists := accumulator["\x12valid"]; !exists {
+		accumulator[accumulator["\x12current"].(string)] = nil
 	}
-	delete(accumulator, "_valid\x1f")
-	delete(accumulator, "_current\x1f")
+	delete(accumulator, "\x12valid")
+	delete(accumulator, "\x12current")
 }
 
 //máximo
@@ -112,17 +107,15 @@ func max(data []JData, groupBy []string, target string) []JData {
 }
 func maxPreProc(accumulator JData, currentData JData, column string, target string) {
 	accumulator[column] = -math.MaxFloat64
-	accumulator["_current\x1f"] = column
+	accumulator["\x12current"] = column
 }
 func maxProc(accumulator JData, currentData JData, column string, target string) {
-	var targetVal float64
-	if val, ok := toFloat64(currentData[target]); ok {
-		targetVal = val
-		accumulator["_valid\x1f"] = true
-	} else {
+	targetVal, ok := toFloat64(currentData[target])
+	if !ok {
 		return
 	}
-	currentMax, _ := toFloat64(accumulator[column])
+	var currentMax float64
+	currentMax, accumulator["\x12valid"] = toFloat64(accumulator[column])
 	accumulator[column] = math.Max(currentMax, targetVal)
 }
 

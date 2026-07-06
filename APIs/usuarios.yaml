@@ -1,0 +1,20 @@
+# version: "1.0"
+usuarios:
+	endpoint: "http://mock-api-1/usuarios/"
+	schema:
+		id:
+			name: "user_id"
+			primary_key: true
+			type: "uuid"
+		username:
+			name: "user_name"
+			type: "string"
+		email:
+			name: "user_email"
+			type: "string"
+		phone:
+			name: "user_phone"
+			type: "string"
+		sector:
+			name: "user_sector"
+			type: "string"

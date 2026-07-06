@@ -1,0 +1,14 @@
+# version: "1.0"
+redes:
+	endpoint: "http://mock-api-3/subredes/"
+	schema:
+		id:
+			name: "rede_id"
+			primary_key: true
+			type: "uuid"
+		nome_segmento:
+			name: "rede_name"
+			type: "string"
+		cidr:
+			name: "rede_cidr"
+			type: "IPSubnet"

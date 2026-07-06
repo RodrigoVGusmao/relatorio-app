@@ -1,0 +1,22 @@
+# version: "1.0"
+endpoints:
+	endpoint: "http://mock-api-2/endpoints/"
+	schema:
+		id:
+			name: "endpoint_id"
+			primary_key: true
+			type: "uuid"
+		hostname:
+			name: "endpoint_hostname"
+			type: "string"
+		ip:
+			name: "endpoint_ip"
+			type: "IPAddress"
+		criticidade:
+			name: "endpoint_criticidade"
+			type: "string"
+		rede_id:
+			name: "endpoint_rede"
+			type: "uuid"
+			foreign_key: "redes.rede_id"
+

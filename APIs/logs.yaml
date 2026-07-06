@@ -1,0 +1,31 @@
+# version: "1.0"
+logs:
+	endpoint: "http://mock-api-4/logs_acesso/"
+	schema:
+		id:
+			name: "log_id"
+			primary_key: true
+			type: "uuid"
+		usuario_id:
+			name: "log_user_id"
+			foreign_key: "usuarios.user_id"
+			type: "uuid"
+		endpoint_id:
+			name: "log_endpoint_id"
+			foreign_key: "endpoints.endpoint_id"
+			type: "uuid"
+		sucesso:
+			name: "log_sucesso"
+			type: "bool"
+		payload_mb:
+			name: "log_payload_mb"
+			type: "float"
+		tentativas:
+			name: "log_tentativas"
+			type: "int"
+		porta_destino:
+			name: "log_dst_porta"
+			type: "int"
+		protocolo:
+			name: "log_protocolo"
+			type: "string"
