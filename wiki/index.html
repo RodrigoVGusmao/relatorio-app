@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Wiki do Projeto - Engine de Agregação de Dados GoAgg</title>
+	<style>
+		:root {
+			--primary-color: #2c3e50;
+			--secondary-color: #34495e;
+			--accent-color: #3498db;
+			--bg-color: #f8f9fa;
+			--text-color: #333;
+			--light-bg: #fff;
+			--border-color: #e2e8f0;
+		}
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			line-height: 1.6;
+			color: var(--text-color);
+			background-color: var(--bg-color);
+			margin: 0;
+			padding: 0;
+		}
+
+		.container {
+			max-width: 1100px;
+			margin: 0 auto;
+			padding: 40px 20px;
+		}
+
+		header {
+			background-color: var(--primary-color);
+			color: white;
+			padding: 40px 0;
+			text-align: center;
+			border-bottom: 4px solid var(--accent-color);
+			margin-bottom: 40px;
+			border-radius: 4px;
+		}
+
+		header h1 {
+			margin: 0;
+			font-size: 2.5rem;
+			font-weight: 600;
+		}
+
+		.subtitle {
+			display: block;
+			margin: 10px auto 0 auto;
+			font-size: 1.1rem;
+			opacity: 0.9;
+			text-align: center;
+		}
+
+		section {
+			background: var(--light-bg);
+			padding: 30px;
+			margin-bottom: 30px;
+			border-radius: 8px;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+			border: 1px solid var(--border-color);
+		}
+
+		h2 {
+			color: var(--primary-color);
+			border-bottom: 2px solid var(--border-color);
+			padding-bottom: 10px;
+			margin-top: 0;
+		}
+
+		h3 {
+			color: var(--secondary-color);
+			margin-top: 20px;
+		}
+
+		p {
+			margin: 0 0 15px 0;
+			text-align: justify;
+		}
+
+		.pipeline-container {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background: #edf2f7;
+			padding: 20px;
+			border-radius: 6px;
+			margin: 25px 0;
+			overflow-x: auto;
+		}
+
+		.pipeline-step {
+			background: var(--primary-color);
+			color: white;
+			padding: 12px 20px;
+			border-radius: 4px;
+			font-weight: bold;
+			text-align: center;
+			min-width: 140px;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+		}
+
+		.pipeline-arrow {
+			font-size: 24px;
+			color: var(--accent-color);
+			font-weight: bold;
+			padding: 0 10px;
+		}
+
+		ul {
+			margin: 0 0 20px 0;
+			padding-left: 20px;
+		}
+
+		li {
+			margin-bottom: 8px;
+		}
+
+		.highlight {
+			background-color: #ebf8ff;
+			border-left: 4px solid var(--accent-color);
+			padding: 15px;
+			margin: 20px 0;
+			border-radius: 0 4px 4px 0;
+		}
+
+		.footer p {
+			text-align: center;
+			margin-top: 50px;
+			font-size: 0.9rem;
+			color: #718096;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="container">
+		<header>
+			<h1>Wiki - Projeto GoAgg</h1>
+			<span class="subtitle">Acelerando a Inteligência de Dados: O Motor de Relatórios em Tempo Real para Microsserviços</span>
+		</header>
+
+		<section id="introducao">
+			<h2>1. Visão Geral & Proposta de Valor</h2>
+			<p>
+				No cenário de microsserviços, a extração de dados dispersos em diferentes APIs pode gerar latência cumulativa, custos de infraestrutura e sobrecarga nos serviços de persistência. O <strong>GoAgg</strong> foi desenvolvido para mitigar esse cenário, atuando como um motor de consolidação de dados diretamente em memória.
+			</p>
+			<p>
+				O sistema unifica fluxos de informações em uma estrutura maleável em tempo de execução. Essa abordagem reduz a necessidade de consultas redundantes a bancos de dados ou o acoplamento a ferramentas externas de análise, fornecendo relatórios consolidados de forma escalável.
+			</p>
+
+			<div class="highlight">
+				<strong>Objetivo do Sistema:</strong> Ao processar e agrupar as regras de negócio em memória, o sistema gera relatórios estatísticos sem dependência de ferramentas pesadas de terceiros, viabilizando a análise de dados sob demanda.
+			</div>
+		</section>
+
+		<section id="fluxo-dados">
+			<h2>2. O Fluxo de Dados (Pipeline de Processamento)</h2>
+			<p>
+				O ciclo de vida das informações dentro do sistema segue um pipeline dividido em 5 etapas principais para consolidar os relatórios:
+			</p>
+
+			<div class="pipeline-container">
+				<div class="pipeline-step">Dados da API<br><small>(JSON Bruto)</small></div>
+				<div class="pipeline-arrow">➔</div>
+				<div class="pipeline-step">Transformação<br><small>(Regras YAML)</small></div>
+				<div class="pipeline-arrow">➔</div>
+				<div class="pipeline-step">Tipo Único<br><small>(Estruturado JData)</small></div>
+				<div class="pipeline-arrow">➔</div>
+				<div class="pipeline-step">Motor de Agregação<br><small>(Processamento em Memória)</small></div>
+				<div class="pipeline-arrow">➔</div>
+				<div class="pipeline-step">Relatório Final<br><small>(Output)</small></div>
+			</div>
+
+			<h3>Detalhamento das Etapas:</h3>
+			<ul>
+				<li><strong>1. Extração (Paralelismo Assíncrono):</strong> Coleta paralela de payloads em formato JSON, consumidos diretamente de múltiplos endpoints HTTP e microsserviços ativos da infraestrutura (como sistemas de Usuários, Endpoints, Redes e Auditoria).</li>
+				<li><strong>2. Transformação Dinâmica (Arquivos YAML):</strong> Leitura externa de arquivos de parametrização em formato YAML. Esses arquivos definem as regras de mapeamento de esquema e sanitização necessárias para cada domínio operacional.</li>
+				<li><strong>3. Unificação Baseada em Tipo Único:</strong> Conversão dos payloads brutos para a estrutura interna unificada denominada <code>JData</code>. Essa camada isola o motor analítico de variações nos esquemas de dados das fontes de origem.</li>
+				<li><strong>4. Processamento em Memória (Motor de Agregação):</strong> Execução de rotinas matemáticas e estatísticas (como médias ponderadas, contagem de elementos únicos, filtragem de valores nulos e análise de extremos) agrupadas e indexadas de forma concorrente.</li>
+				<li><strong>5. Geração do Relatório:</strong> Consolidação analítica e formatação do output final purificado, gerando relatórios gerenciais prontos para consumo no momento da requisição.</li>
+			</ul>
+		</section>
+
+    <section id="arquitetura-tecnica">
+			<h2>3. Engenharia de Infraestrutura e Performance</h2>
+			<p>
+				A escolha das tecnologias de base reflete o foco do projeto em previsibilidade, eficiência de consumo de hardware e escalabilidade linear sob concorrência. Abaixo estão detalhados os fundamentos arquiteturais e os trade-offs avaliados para o desenvolvimento do motor.
+			</p>
+
+			<h3>3.1. Go vs. C: Paradigmas de Gerenciamento, Concorrência e Arquitetura</h3>
+			<p>
+				Embora ambas as linguagens ofereçam alto desempenho, elas abordam a eficiência de maneiras distintas. A linguagem C fornece controle manual sobre o hardware através de gerenciamento de memória (<code>malloc/free</code>) e diretivas estritas de compilação, permitindo otimizações em nível de registradores, com custo em complexidade operacional.
+			</p>
+			<p>
+				Go gerencia sistemas concorrentes por meio de uma camada de abstração com Garbage Collector (GC) otimizado para pausas de baixa latência. Isso entrega velocidade de execução próxima à de C, aumentando a produtividade no desenvolvimento e oferecendo segurança contra corrupção de memória.
+			</p>
+
+			<table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95rem; text-align: left;">
+				<thead>
+					<tr style="background-color: var(--secondary-color); color: white;">
+						<th style="padding: 12px; border: 1px solid var(--border-color); width: 25%;">Critério Técnico</th>
+						<th style="padding: 12px; border: 1px solid var(--border-color); width: 37.5%;">Linguagem C (Abordagem de Baixo Nível)</th>
+						<th style="padding: 12px; border: 1px solid var(--border-color); width: 37.5%;">Linguagem Go (Abordagem GoAgg)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="padding: 12px; border: 1px solid var(--border-color); font-weight: bold;">Gerenciamento de Memória</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); color: #c0392b;"><strong>Manual (malloc/free):</strong> Risco de vazamentos de memória (memory leaks) se não gerenciado de forma detalhada.</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); color: #27ae60;"><strong>Automático (Garbage Collector):</strong> Segurança nativa contra corrupção, com pausas sub-milissegundo.</td>
+					</tr>
+					<tr style="background-color: #f9f9f9;">
+						<td style="padding: 12px; border: 1px solid var(--border-color); font-weight: bold;">Concorrência e Escala</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); color: #34495e;"><strong>Modelo 1:1 (Threads do SO):</strong> Mapeamento direto no kernel. Cada thread consome de 1MB a 8MB de alocação de stack e exige gerenciamento complexo de travas (mutexes).</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); color: #27ae60;"><strong>Modelo M:N (Multiplexado):</strong> O Go Runtime gerencia milhares de Goroutines leves (~2KB de stack inicial) sobre poucas threads do SO.</td>
+					</tr>
+					<tr>
+						<td style="padding: 12px; border: 1px solid var(--border-color); font-weight: bold;">Garantia de Imutabilidade</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); color: #27ae60;"><strong>Estrita (const):</strong> O compilador bloqueia modificações na estrutura de dados sem custo adicional em tempo de execução.</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); color: #c0392b;"><strong>Via Código (Cópias):</strong> A ausência de const exige clonagem manual de estruturas para isolar o fluxo.</td>
+					</tr>
+					<tr style="background-color: #f9f9f9;">
+						<td style="padding: 12px; border: 1px solid var(--border-color); font-weight: bold;">Velocidade de Entrega</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); color: #c0392b;"><strong>Baixa:</strong> Desenvolvimento lento devido à necessidade de implementar estruturas base de forma manual.</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); color: #27ae60;"><strong>Alta:</strong> Curva de aprendizado rápida, bom ferramental nativo e foco na lógica da aplicação.</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>3.2. O Impacto Prático na Engenharia do GoAgg</h3>
+			<p>
+				A escolha de Go simplifica a ingestão paralela de microsserviços. O motor utiliza primitivas de sincronização nativas para disparar requisições de rede concorrentes, aproveitando os núcleos da CPU sem travar o fluxo principal do software.
+			</p>
+			<p>
+				O tipo unificado <code>JData</code> mapeia os payloads heterogêneos na memória. Para otimizar o processamento analítico e mitigar a varredura do Garbage Collector sobre estruturas dinâmicas, o motor adota uma indexação que reduz os agrupamentos a buscas diretas, mantendo uma latência previsível limitada pelo tempo de resposta do microsserviço mais lento.
+			</p>
+
+			<h3>3.3. Retrospectiva Técnica e Trade-offs do Projeto</h3>
+			<p>
+				Durante o desenvolvimento do motor, a equipe tratou limitações de design da linguagem Go. A ausência de restrições de imutabilidade ao nível do compilador gerou desafios de integridade na esteira de processamento. Para isolar o estado contra alterações acidentais, implementamos cópias superficiais (<code>shallow copies</code>) através de laços de repetição chave-valor no método de clonagem do <code>JData</code>. Como o motor processa dados primitivos nesta entrega, essa abordagem desvincula as referências sem grande impacto computacional, embora a evolução para estruturas aninhadas e mais complexas no futuro exija atenção para evitar efeitos colaterais.
+			</p>
+			<p>
+				O balanço final valida o ecossistema escolhido. A simplicidade na orquestração de rotinas concorrentes e a proteção do runtime contra corrupção de memória compensaram as restrições de baixo nível, resultando em um motor estável preparado para escala horizontal sustentável.
+			</p>
+		</section>
+		
+		<section id="metricas-performance">
+			<h2>4. Validação de Performance & Eficiência de Infraestrutura</h2>
+			<p>
+				Para avaliar a eficiência do motor sob concorrência, submetemos a arquitetura do <strong>GoAgg</strong> a testes de estresse contra um modelo de processamento sequencial tradicional. O experimento mediu o comportamento do sistema integrando de 2 a 32 microsserviços simulados de forma síncrona e assíncrona.
+			</p>
+
+			<h3>4.1. Eficiência Concorrente vs. Abordagem Tradicional</h3>
+			<p>
+				Os dados estatísticos coletados demonstram o comportamento do modelo de concorrência implementado em Go. Enquanto a abordagem sequencial tradicional sofre uma degradação linear de performance a cada nova API adicionada, o <strong>GoAgg</strong> mantém a latência de consolidação estável, limitada pelo tempo de resposta do microsserviço mais lento.
+			</p>
+
+			<table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95rem; text-align: left;">
+				<thead>
+					<tr style="background-color: var(--primary-color); color: white;">
+						<th style="padding: 12px; border: 1px solid var(--border-color);">Volumetria (Múltiplas APIs)</th>
+						<th style="padding: 12px; border: 1px solid var(--border-color);">Modelo Tradicional (Sequencial)</th>
+						<th style="padding: 12px; border: 1px solid var(--border-color);">Motor GoAgg (Paralelo)</th>
+						<th style="padding: 12px; border: 1px solid var(--border-color);">Ganho de Eficiência (Média)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="padding: 12px; border: 1px solid var(--border-color); font-weight: bold;">2 APIs Integradas</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color);">258.02 ms</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); color: #2ecc71; font-weight: bold;">150.55 ms</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); background-color: #fafffa; font-weight: bold;">1.7x mais rápido</td>
+					</tr>
+					<tr style="background-color: #f9f9f9;">
+						<td style="padding: 12px; border: 1px solid var(--border-color); font-weight: bold;">4 APIs Integradas</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color);">596.31 ms</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); color: #2ecc71; font-weight: bold;">177.20 ms</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); background-color: #fafffa; font-weight: bold;">3.3x mais rápido</td>
+					</tr>
+					<tr>
+						<td style="padding: 12px; border: 1px solid var(--border-color); font-weight: bold;">8 APIs Integradas</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color);">1073.03 ms</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); color: #2ecc71; font-weight: bold;">191.12 ms</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); background-color: #fafffa; font-weight: bold;">5.6x mais rápido</td>
+					</tr>
+					<tr style="background-color: #f9f9f9;">
+						<td style="padding: 12px; border: 1px solid var(--border-color); font-weight: bold;">16 APIs Integradas</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color);">2286.44 ms</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); color: #2ecc71; font-weight: bold;">197.10 ms</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); background-color: #fafffa; font-weight: bold;">11.5x mais rápido</td>
+					</tr>
+					<tr>
+						<td style="padding: 12px; border: 1px solid var(--border-color); font-weight: bold;">32 APIs Integradas</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color);">4561.42 ms</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); color: #2ecc71; font-weight: bold;">203.19 ms</td>
+						<td style="padding: 12px; border: 1px solid var(--border-color); background-color: #fafffa; font-weight: bold;">22.4x mais rápido</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>4.2. Retorno sobre Infraestrutura (Análise Gráfica de Escalabilidade)</h3>
+			<p>
+				Com 32 conexões simultâneas de microsserviços, o modelo sequencial atinge a marca de 4.5 segundos por requisição. O <strong>GoAgg</strong> executa o mesmo cenário em <strong>203 milissegundos</strong>, representando uma resposta <strong>22 vezes superior</strong> em velocidade.
+			</p>
+			
+			<div style="display: flex; gap: 20px; justify-content: space-between; margin-top: 25px; flex-wrap: wrap;">
+				<div style="flex: 1; min-width: 300px; background: #fafafa; padding: 15px; border-radius: 6px; border: 1px solid var(--border-color); text-align: center;">
+					<img src="grafico_barras_n4.png" alt="Comparativo de Carga em Larga Escala" style="max-width: 100%; height: auto; border-radius: 4px;">
+					<p style="font-size: 0.85rem; margin-top: 10px; color: #666;"><em>Figura 1: Distribuição de latência e desvio padrão entre os modos de processamento.</em></p>
+				</div>
+				<div style="flex: 1; min-width: 300px; background: #fafafa; padding: 15px; border-radius: 6px; border: 1px solid var(--border-color); text-align: center;">
+					<img src="grafico_escalabilidade.png" alt="Curva de Escalabilidade Linear do Sistema" style="max-width: 100%; height: auto; border-radius: 4px;">
+					<p style="font-size: 0.85rem; margin-top: 10px; color: #666;"><em>Figura 2: Curva de escalabilidade do motor GoAgg vs. crescimento linear do modelo sequencial.</em></p>
+				</div>
+			</div>
+
+			<div class="highlight">
+				<strong>Impacto Arquitetural:</strong> Em ambientes de microsserviços, adotar o motor concorrente garante que o tempo de consolidação do sistema permaneça previsível e próximo ao tempo da API mais lenta frente ao crescimento do ecossistema. Isso se traduz em menor ociosidade de hardware e redução de gargalos por timeout.
+			</div>
+		</section>
+		
+		<section id="conclusao">
+			<h2>5. Conclusão</h2>
+			<p>
+				A validação do <strong>GoAgg</strong> confirma a eficácia do processamento concorrente aplicado à agregação de dados. Ao neutralizar o acúmulo de tempo de resposta típico de requisições sequenciais, o motor atingiu seu objetivo de engenharia, entregando resultados com latência previsível limitada pelo tempo de resposta do microsserviço mais lento, mesmo com o aumento no volume de conexões.
+			</p>
+			<p>
+				O ecossistema Go atendeu os requisitos do projeto através de suas primitivas de concorrência multiplexada e isolamento seguro de memória. O balanço do projeto demonstra que as rotinas de sincronização e o uso de cópias superficiais (shallow copies) para mitigar a ausência de imutabilidade nativa foram escolhas justificadas, resultando em um sistema eficiente no consumo de hardware e com estabilidade operacional.
+			</p>
+		</section>
+
+		<div class="footer">
+			<p>Documentação Técnica do Projeto — Desenvolvido em Go • 2026</p>
+		</div>
+	</div>
+
+</body>
+</html>
