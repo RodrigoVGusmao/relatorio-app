@@ -1,4 +1,4 @@
-package main
+package sumarizador
 
 import (
 	"math"
@@ -12,12 +12,12 @@ func nilPreProc(accumulator JData, currentData JData, column string, target stri
 }
 
 //agrupamento
-func groupBy(data []JData, groupBy []string, target string) []JData {
+func GroupBy(data []JData, groupBy []string, target string) []JData {
 	return aggregate(data, groupBy, "", "", nil, nil, nil)
 }
 
 //contagem
-func count(data []JData, groupBy []string, target string) []JData {
+func Count(data []JData, groupBy []string, target string) []JData {
 	return aggregate(data, groupBy, "", "count", zeroPreProc, countProc, nil)
 }
 func countProc(accumulator JData, currentData JData, column string, target string) {
@@ -26,7 +26,7 @@ func countProc(accumulator JData, currentData JData, column string, target strin
 }
 
 //contagem não nula
-func countNotNil(data []JData, groupBy []string, target string) []JData {
+func CountNotNil(data []JData, groupBy []string, target string) []JData {
 	return aggregate(data, groupBy, target, "count_not_null", zeroPreProc, countNotNilProc, nil)
 }
 func countNotNilProc(accumulator JData, currentData JData, column string, target string) {
@@ -36,13 +36,13 @@ func countNotNilProc(accumulator JData, currentData JData, column string, target
 }
 
 //contagem de valores únicos
-func countDistinct(data []JData, groupByVar []string, target string) []JData {
-	ret := groupBy(data, append(groupByVar, target), "")
+func CountDistinct(data []JData, groupByVar []string, target string) []JData {
+	ret := GroupBy(data, append(groupByVar, target), "")
 	return aggregate(ret, groupByVar, target, "count_distinct", zeroPreProc, countProc, nil)
 }
 
 //soma
-func sum(data []JData, groupBy []string, target string) []JData {
+func Sum(data []JData, groupBy []string, target string) []JData {
 	return aggregate(data, groupBy, target, "sum", nilPreProc, sumProc, nil)
 }
 func sumProc(accumulator JData, currentData JData, column string, target string) {
@@ -55,7 +55,7 @@ func sumProc(accumulator JData, currentData JData, column string, target string)
 }
 
 //média
-func avg(data []JData, groupBy []string, target string) []JData {
+func Avg(data []JData, groupBy []string, target string) []JData {
 	return aggregate(data, groupBy, target, "avg", nil, avgProc, avgPosProc)
 }
 func avgProc(accumulator JData, currentData JData, column string, target string) {
@@ -77,7 +77,7 @@ func avgPosProc(accumulator JData, currentData JData, column string, target stri
 }
 
 //mínimo
-func min(data []JData, groupBy []string, target string) []JData {
+func Min(data []JData, groupBy []string, target string) []JData {
 	return aggregate(data, groupBy, target, "min", minPreProc, minProc, minMaxPosProc)
 }
 func minPreProc(accumulator JData, currentData JData, column string, target string) {
@@ -102,7 +102,7 @@ func minMaxPosProc(accumulator JData, currentData JData, column string, target s
 }
 
 //máximo
-func max(data []JData, groupBy []string, target string) []JData {
+func Max(data []JData, groupBy []string, target string) []JData {
 	return aggregate(data, groupBy, target, "max", maxPreProc, maxProc, minMaxPosProc)
 }
 func maxPreProc(accumulator JData, currentData JData, column string, target string) {
@@ -120,7 +120,7 @@ func maxProc(accumulator JData, currentData JData, column string, target string)
 }
 
 //agregação de valores em arrays
-func arrPack(data []JData, groupBy []string, target string) []JData {
+func ArrPack(data []JData, groupBy []string, target string) []JData {
 	return aggregate(data, groupBy, target, "arr", arrPreProc, arrProc, arrPosProc)
 }
 func arrPreProc(accumulator JData, currentData JData, column string, target string) {
@@ -135,7 +135,7 @@ func arrPosProc(accumulator JData, currentData JData, column string, target stri
 }
 
 //agregação de valores distintos em array
-func arrDistinctPack(data []JData, groupByVar []string, target string) []JData {
-	ret := groupBy(data, append(groupByVar, target), "")
+func ArrDistinctPack(data []JData, groupByVar []string, target string) []JData {
+	ret := GroupBy(data, append(groupByVar, target), "")
 	return aggregate(ret, groupByVar, target, "set", arrPreProc, arrProc, arrPosProc)
 }

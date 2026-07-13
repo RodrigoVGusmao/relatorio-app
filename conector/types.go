@@ -1,4 +1,4 @@
-package main
+package conector
 
 import (
 	"errors"
@@ -6,23 +6,34 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type configColumn struct {
+type FKey struct {
+	Table string	`yaml:"table"`
+	Column string	`yaml:"column"`
+}
+
+type ConfigColumn struct {
 	DataType string		`yaml:"type"`
 	IsPrimaryKey bool	`yaml:"primary_key"`
 	Rename string		`yaml:"name"`
-	ForeignKey string	`yaml:"foreign_key"`
+	ForeignKey FKey		`yaml:"foreign_key"`
 }
 
-type configEndpoint struct {
+type ConfigEndpoint struct {
 	EndpointLocation string		`yaml:"endpoint"`
-	Schema map[string]configColumn	`yaml:"schema"`
+	Schema map[string]ConfigColumn	`yaml:"schema"`
 }
 
-type configEnvironment map[string]any
+type ConfigEnvironment map[string]any
 
-func (m *configEnvironment) UnmarshalYAML(value *yaml.Node) error {
+type NormData map[string]any
+
+type NormRecord []NormData
+
+type NormRecords map[string]NormRecord
+
+func (m *ConfigEnvironment) UnmarshalYAML(value *yaml.Node) error {
 	if *m == nil {
-		*m = make(configEnvironment)
+		*m = make(ConfigEnvironment)
 	}
 	if value.Kind != yaml.MappingNode {
 		return errors.New("yaml file is invalid or empty")
@@ -36,7 +47,7 @@ func (m *configEnvironment) UnmarshalYAML(value *yaml.Node) error {
 			continue
 		}
 		
-		var endpoint configEndpoint
+		var endpoint ConfigEndpoint
 		if err := elements[i+1].Decode(&endpoint); err != nil {
 			errs, _ := (*m)["\x12err"].([]error)
 			(*m)["\x12err"] = append(errs, err)

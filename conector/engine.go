@@ -1,6 +1,7 @@
-package main
+package conector
 
 import (
+	"fmt"
 	"io/fs"
 	"path"
 	"regexp"
@@ -22,4 +23,35 @@ func matchDir(fds fs.FS, dir string, compFunc compFunc) ([]string, error) {
 		}
 	}
 	return ret, err
+}
+
+func depthFirstSearch (env ConfigEnvironment, currentPoint string, seen map[string]bool) (int, []error) {
+	if seen[currentPoint] {
+		return 0, []error{fmt.Errorf("%s", currentPoint)}
+	}
+	
+	seen[currentPoint] = true
+	
+	nodes := 0
+	var errArr []error
+	endpoint := env[currentPoint].(ConfigEndpoint)
+	for column, value := range endpoint.Schema{
+		if value.ForeignKey.Table != "" {
+			nodesProp, err := depthFirstSearch(env, value.ForeignKey.Table, seen)
+			if err != nil {
+				for _, val := range err {
+					errArr = append(errArr, fmt.Errorf("%s -> %v", currentPoint, val))
+				}
+				value.ForeignKey.Table = ""
+				value.ForeignKey.Column = ""
+				endpoint.Schema[column] = value
+				env[currentPoint] = endpoint
+				continue
+			}
+			nodes = max(nodes, nodesProp)
+		}
+	}
+	
+	seen[currentPoint] = false
+	return nodes+1, errArr
 }

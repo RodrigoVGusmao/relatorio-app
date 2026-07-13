@@ -25,6 +25,7 @@ services:
       retries: 5
     volumes:
         - ./mockAPIs/Data/API_1.json:/data/db.json
+    command: --delay 50
 
   mock-api-2:
     image: clue/json-server
@@ -37,6 +38,7 @@ services:
       retries: 5
     volumes:
         - ./mockAPIs/Data/API_2.json:/data/db.json
+    command: --delay 75
         
   mock-api-3:
     image: clue/json-server
@@ -49,6 +51,7 @@ services:
       retries: 5
     volumes:
         - ./mockAPIs/Data/API_3.json:/data/db.json
+    command: --delay 100
 
   mock-api-4:
     image: clue/json-server
@@ -61,3 +64,4 @@ services:
       retries: 5
     volumes:
         - ./mockAPIs/Data/API_4.json:/data/db.json
+    command: --delay 125

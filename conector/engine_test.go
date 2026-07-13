@@ -1,4 +1,4 @@
-package main
+package conector
 
 import (
 	"io/fs"
@@ -19,46 +19,21 @@ func matchDirResult(t *testing.T, name string, fds fs.FS, dir string, compFunc c
 	}
 }
 func Test_matchDir(t *testing.T) {
-	file :=[][]byte{[] byte("Lorem Ipsum"), []byte(`# version: "1.0"
-usuarios:
-	endpoint: "http://mock-api-1/usuarios/"
-	schema:
-		id:
-			name: "user_id"
-			primary_key: true
-			type: "uuid"
-endpoints:
-	endpoint: "http://mock-api-1/usuarios/"
-	schema:
-		id:
-			name: "user_id"
-			primary_key: true
-			type: "uuid"`), []byte(`endpoints:
-	endpoint: "http://mock-api-1/usuarios/"
-	schema:
-		id:
-			name: "user_id"
-			primary_key: true
-			type: "uuid"`), []byte(`teste:
-	endpoint: "http://mock-api-1/usuarios/"
-	schema:
-		id:
-			name: "user_id"
-			primary_key: true
-			type: "uuid"
-teste:
-	endpoint: "http://mock-api-1/usuarios/"
-	schema:
-		id:
-			name: "user_id"
-			primary_key: true
-			type: "uuid"`), []byte(`endpoints:
-	endpoint: "http://mock-api-1/usuarios/"
-	schema:
-		id:
-			name: "user_id"
-			primary_key: true
-			type: "uuid"`)}
+	file :=[][]byte{
+		[]byte("Lorem Ipsum"), 
+		fileRoot(
+				fileEnv("usuarios", 
+					fileUuidColumn("id", "user_id"),
+				fileEnv("endpoints", 
+					fileUuidColumn("id", "user_id"),),),),
+		fileRoot(
+				fileEnv("endpoints", 
+					fileUuidColumn("id", "user_id"),),),
+		fileRoot(
+				fileEnv("teste", 
+					fileUuidColumn("id", "user_id"),), 
+				fileEnv("teste", 
+					fileUuidColumn("id", "user_id"),),),}
 	mockFS := fstest.MapFS{
 		"test/app.yaml": &fstest.MapFile{Data: file[1]},
 		"test/db.yml": &fstest.MapFile{Data: file[2]},
@@ -68,7 +43,7 @@ teste:
 		"test/double.yaml.url": &fstest.MapFile{Data: file[0]},
 		"test/what.yaaml": &fstest.MapFile{Data: file[0]},
 		"test/what.ybml": &fstest.MapFile{Data: file[0]},
-		"test/folder.yaml/next.yaml": &fstest.MapFile{Data: file[4]},
+		"test/folder.yaml/next.yaml": &fstest.MapFile{Data: file[1]},
 		"test/folder.yaml/teste.txt": &fstest.MapFile{Data: file[0]},
 	}
 	

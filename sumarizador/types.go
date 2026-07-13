@@ -1,4 +1,4 @@
-package main
+package sumarizador
 
 type JData map[string]any
 func (src JData) Clone() JData {
