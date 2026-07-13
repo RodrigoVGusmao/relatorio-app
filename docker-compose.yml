@@ -4,6 +4,8 @@ services:
     container_name: go_relatorio_container
     volumes:
         - ./APIs:/root/APIs
+        - ./relatorios:/root/relatorios
+        - ./dashboard.html:/root/dashboard.html
     depends_on:
         mock-api-1:
             condition: service_healthy

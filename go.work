@@ -4,5 +4,6 @@ use (
 	.
 	./conector
 	./correlacionador
+	./gerador
 	./sumarizador
 )

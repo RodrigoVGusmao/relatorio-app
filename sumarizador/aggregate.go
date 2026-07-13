@@ -4,6 +4,23 @@ import (
 	"math"
 )
 
+var funcoesSuportadas = map[string]AggProc{
+	"groupBy": GroupBy,
+	"count": Count,
+	"countNotNull": CountNotNil,
+	"countUnique": CountDistinct,
+	"sum": Sum,
+	"avg": Avg,
+	"max": Max,
+	"min": Min,
+	"arrPack": ArrPack,
+	"arrPackUnique": ArrDistinctPack,
+}
+
+func StrToProc(proc string) AggProc {
+	return funcoesSuportadas[proc]
+}
+
 func zeroPreProc(accumulator JData, currentData JData, column string, target string) {
 	accumulator[column] = 0.0
 }

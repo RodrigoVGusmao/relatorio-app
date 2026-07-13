@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"relatorio/conector"
 	"relatorio/correlacionador"
+	"relatorio/gerador"      // Importado o novo pacote gerador
 	"relatorio/sumarizador"
 	"sync"
 	"time"
@@ -54,9 +55,10 @@ func carregarDadosSequencial(configEnv conector.ConfigEnvironment) conector.Norm
 		corpoBytes, _ := io.ReadAll(resp.Body)
 		resp.Body.Close()
 
-		registroNormalizado, err := conector.NormalizeData(resp.Data, endpointConfig, resp.EndpointName)
+		// Correção sutil que estava no código original: extrair dados da resposta local
+		registroNormalizado, err := conector.NormalizeData(corpoBytes, endpointConfig, nome)
 		if err != nil {
-			fmt.Printf("[Erro] Falha ao normalizar dados de %q: %v\n", resp.EndpointName, err)
+			fmt.Printf("[Erro] Falha ao normalizar dados de %q: %v\n", nome, err)
 			continue
 		}
 		registrosSequenciais[nome] = registroNormalizado
@@ -66,22 +68,16 @@ func carregarDadosSequencial(configEnv conector.ConfigEnvironment) conector.Norm
 
 func main() {
 	// -------------------------------------------------------------------------
-	// ETAPA 1: Carregar Configurações YAML Dinamicamente
+	// ETAPA 1: Carregar Configurações YAML Dinamicamente (Infra de Conexão)
 	// -------------------------------------------------------------------------
-	// 1. Descobre o caminho absoluto do executável atual
 	execPath, err := os.Executable()
 	if err != nil {
-	    fmt.Printf("[Erro] Não foi possível encontrar o caminho do executável: %v\n", err)
-	    os.Exit(1)
+		fmt.Printf("[Erro] Não foi possível encontrar o caminho do executável: %v\n", err)
+		os.Exit(1)
 	}
 
-	// 2. Pega a pasta onde o executável está localizado
 	execDir := filepath.Dir(execPath)
-
-	// 3. Monta o caminho apontando para a pasta "APIs" ao lado do executável
 	apisPath := filepath.Join(execDir, "APIs")
-
-	// 4. Cria o sistema de arquivos apontando para o novo caminho relativo dinâmico
 	dirFS := os.DirFS(apisPath)
 	
 	configEnv, errs := conector.LoadConfigFiles(dirFS, ".")
@@ -97,20 +93,26 @@ func main() {
 	}
 	fmt.Printf("[Info] Tabela Raiz (Nó Pai): %q\n", rootTable)
 
+	// Novo: Carrega os arquivos YAML que descrevem os Pipelines de Relatórios
+	// Assume uma pasta chamada "Relatorios" ao lado do executável contendo as blueprints
+	reportsPath := filepath.Join(execDir, "relatorios")
+	reportsFS := os.DirFS(reportsPath)
+	
+	configRelatorios, err := gerador.LoadReportConfigFiles(reportsFS, "relatorio.yaml") // ou "." para varrer tudo
+	if err != nil {
+		fmt.Printf("[Erro] Falha ao carregar blueprints de relatórios: %v\n", err)
+		os.Exit(1)
+	}
+
 	// -------------------------------------------------------------------------
 	// ETAPA 2: Disparar Requisições Concorrentes usando URLs do YAML
 	// -------------------------------------------------------------------------
-	// -------------------------------------------------------------------------
-	// DEBUGGING DE DESEMPENHO: CONCORRENTE VS SEQUENCIAL
-	// -------------------------------------------------------------------------
 	fmt.Println("\n[Debug] Iniciando Teste Comparativo de Coleta...")
 
-	// Medição 1: Abordagem Sequencial
 	inicioSeq := time.Now()
-	_ = carregarDadosSequencial(configEnv) // Apenas simula para pegar o tempo
+	_ = carregarDadosSequencial(configEnv) 
 	duracaoSeq := time.Since(inicioSeq)
 
-	// Medição 2: Abordagem Concorrente Real (O código que já tínhamos)
 	inicioPar := time.Now()
 	var wg sync.WaitGroup
 	canalRespostas := make(chan RespostaAPI, len(configEnv))
@@ -150,7 +152,6 @@ func main() {
 	}
 	duracaoPar := time.Since(inicioPar)
 
-	// Exibe o veredito no terminal
 	fmt.Printf("\n====== VEREDITO DE PERFORMANCE ======\n")
 	fmt.Printf("Tempo no modo Sequencial : %v\n", duracaoSeq)
 	fmt.Printf("Tempo no modo Concorrente: %v\n", duracaoPar)
@@ -162,38 +163,45 @@ func main() {
 	// -------------------------------------------------------------------------
 	fmt.Println("\n[Info] Iniciando a correlação de Chaves Estrangeiras (Joins)...")
 	
-	// Executa a árvore de unificação a partir do nó raiz determinado dinamicamente
 	tabelaUnificada := correlacionador.MakeUnifiedData(todosOsRegistros, configEnv, rootTable)
-	
 	fmt.Printf("[Sucesso] Dados unificados com base na raiz %q. Total de linhas: %d\n", rootTable, len(tabelaUnificada))
 
 	// -------------------------------------------------------------------------
-	// ETAPA 5: Converter e Sumarizar Métricas Analíticas (Sumarizador)
+	// ETAPA 5: Executar Pipelines e Exportar para Dashboard HTML Dinâmico
 	// -------------------------------------------------------------------------
-	fmt.Println("\n[Info] Iniciando processamento de métricas no Sumarizador...")
+	fmt.Println("\n[Info] Iniciando processamento de métricas e geração do Dashboard HTML...")
 
-	// O sumarizador consome o tipo []JData (que possui a assinatura map[string]any)
-	// Como seu normRecord é []normData (onde normData também é map[string]any),
-	// podemos converter ou fazer a ponte de tipos aqui:
+	// Prepara a massa unificada bruta para a esteira funcional do Sumarizador
 	dadosParaSumarizar := make([]sumarizador.JData, len(tabelaUnificada))
 	for i, v := range tabelaUnificada {
 		dadosParaSumarizar[i] = sumarizador.JData(v)
 	}
 
-	// Exemplo prático de métrica usando suas funções de sumarização:
-	// Vamos agrupar os dados pela criticidade dos endpoints e contar o volume
-	colunaAgrupamento := []string{"endpoints.endpoint_criticidade"}
-	resultadoMetricas := sumarizador.Count(dadosParaSumarizar, colunaAgrupamento, "endpoints.endpoint_id")
+	// Mapa que vai reter a saída final de cada relatório executado
+	todosOsResultados := make(map[string][]sumarizador.JData)
 
-	// Imprime os indicadores finais consolidados
-	fmt.Println("\n================ RESULTADO DO RELATÓRIO OBTIDO ================")
-	for _, metrica := range resultadoMetricas {
-		fmt.Printf("Criticidade: %v | Total de Ocorrências: %v\n", 
-			metrica["endpoints.endpoint_criticidade"], 
-			metrica["count_"],
-		)
+	// Varre todos os relatórios declarados no YAML
+	for nomeRelatorio, configReport := range configRelatorios {
+		fmt.Printf("[Processando] Executando esteira para: %s\n", nomeRelatorio)
+		
+		// Executa as transformações sequenciais do pipeline passando o resultado do passo anterior
+		resultadoPipeline := gerador.RunReportConfig(configReport, dadosParaSumarizar)
+		
+		// Registra o resultado final atrelado ao nome dele
+		todosOsResultados[nomeRelatorio] = resultadoPipeline
 	}
-	fmt.Println("===============================================================")
 
-	fmt.Printf("\n[OK] Pipeline executada com sucesso absoluto! Tempo total: %v\n", time.Since(inicioSeq))
+	// Caminho do arquivo de saída na raiz da aplicação
+	htmlOutputPath := filepath.Join(execDir, "dashboard.html")
+
+	// Dispara a geração da página rica em tabelas
+	err = gerador.ExportToHTML(todosOsResultados, htmlOutputPath)
+	if err != nil {
+		fmt.Printf("[Erro] Falha catastrófica ao exportar relatório para HTML: %v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("\n[OK] Pipeline executada com sucesso absoluto!\n")
+	fmt.Printf("[Sucesso] Dashboard gerado com sucesso em: %s\n", htmlOutputPath)
+	fmt.Printf("Tempo total decorrido: %v\n", time.Since(inicioSeq))
 }

@@ -1,0 +1,19 @@
+# version: "1.0"
+data:
+    pipeline:
+"acessos por criticidade":
+    pipeline:
+        - operation: "count"
+          columns: ["endpoints.endpoint_criticidade"]
+"payload_mb por porta":
+    pipeline:
+        - operation: "sum"
+          columns: ["logs.log_dst_porta"]
+          target: "logs.log_payload_mb"
+"maior payload_mb total":
+    pipeline:
+        - operation: "sum"
+          columns: ["logs.log_dst_porta"]
+          target: "logs.log_payload_mb"
+        - operation: "max"
+          target: "sum_logs.log_payload_mb"

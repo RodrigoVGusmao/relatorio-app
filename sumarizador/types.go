@@ -1,5 +1,7 @@
 package sumarizador
 
+type AggProc func(data []JData, groupBy []string, target string) []JData
+
 type JData map[string]any
 func (src JData) Clone() JData {
     if src == nil {
